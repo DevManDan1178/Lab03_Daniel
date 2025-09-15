@@ -125,7 +125,11 @@ public class Lab03_Daniel extends Application{
         primaryStage.show();
     }
 
-    
+    /**
+     * Checks if email is valid 
+     * @param string
+     * @return true if string is that of a (potentially) valid email address | else false
+     */
     private boolean checkEmail(String string) {
         // [email]@[provider].[domain] -> must have an '@' and a '.' at least 1 char after (check from the 2nd character after '@')
         int index = string.indexOf('@');
@@ -137,6 +141,11 @@ public class Lab03_Daniel extends Application{
         return string.indexOf('.', index + 2) != -1;
     }
     
+    /**
+     * Checks if password is valid
+     * @param string
+     * @return true if string contains at least 1 digit and 1 letter | else false
+     */
     private boolean checkPassword(String string) {
         // Must contain : at least 1 digit, 1 letter   
         boolean containsDigit = false, containsLetter = false;
