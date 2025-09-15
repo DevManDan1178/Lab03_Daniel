@@ -5,7 +5,9 @@
 package lab03_daniel;
 
 
+import java.util.Arrays;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -16,7 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -70,7 +71,8 @@ public class Lab03_Daniel extends Application{
               
         gridPane.add(passLabel, 0, 3);
         gridPane.add(passField, 1, 3);
-
+   
+        
         // Buttons
             //Register
         Button registerButton = new Button("Register");
@@ -79,12 +81,18 @@ public class Lab03_Daniel extends Application{
         Button clearButton = new Button("Clear");
         gridPane.add(clearButton, 1, 4);
         
-        TextInputControl[] inputFields = {firstNameTxtField, lastNameTxtField, emailTxtField, passField};
+        // Message label (Error/Success)
+        Label msgLabel = new Label("");
+        gridPane.add(msgLabel, 1, 5);
+        // Array of input fields to shorten code
+        TextField[] inputFields = {firstNameTxtField, lastNameTxtField, emailTxtField, passField};
         
         // Setup functionality
         registerButton.setDisable(true);
-        EventHandler fieldInputHandler = (EventHandler) (Event event) -> {
-            for (TextInputControl field : inputFields) {
+        // Event handler for input fields (detects if register button should be enabled)
+        EventHandler fieldInputHandler = (Event event) -> {
+            //If an input field is empty -> disable register | else enable register
+            for (TextField field : inputFields) {
                 if (field.getText().isEmpty()) {
                     registerButton.setDisable(true);
                     return;
@@ -93,13 +101,53 @@ public class Lab03_Daniel extends Application{
             registerButton.setDisable(false);   
         };
         
-        for (TextInputControl field : inputFields) {
+        for (TextField field : inputFields) {
             field.addEventHandler(EventType.ROOT, fieldInputHandler);
         }
-        //Show
+        
+        // Handle clicks for register button (detects if the fields are valid)
+        registerButton.setOnAction((ActionEvent event) -> {
+            //If email and password is valid, display welcome message | else display error message (on message label)
+            String message = (checkEmail(emailTxtField.getText()) && checkPassword(passField.getText())) ? "Welcome" : "Invalid email/password";
+            msgLabel.setText(message);
+
+        });
+        
+        // Handle clicks for clear button (clears all textfields)
+        clearButton.setOnAction((ActionEvent event) -> {
+            for (TextField field : inputFields) {
+                field.setText("");
+            }
+        });
+        
+        // Show 
         Scene scene = new Scene(rootBorder);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-}
+    
+    private boolean checkEmail(String string) {
+        // [email]@[provider].[domain] -> must have an '@' and a '.' at least 1 char after (check from the 2nd character after '@')
+        int index = string.indexOf('@');
+        int strLen = string.length();
+        if (index == 0 || index == strLen) {
+            return false;
+        }
+        
+        return string.indexOf('.', index + 2) != -1;
+    }
+    
+    private boolean checkPassword(String string) {
+        // Must contain : at least 1 digit, 1 letter   
+        boolean containsDigit = false, containsLetter = false;
+        for (char c : string.toCharArray()) {
+            containsDigit = containsDigit || Character.isDigit(c);
+            containsLetter = containsLetter || Character.isLetter(c);
+            if (containsDigit && containsLetter) {
+                return true;
+            }
+        }
+        return false;
+    }
+} 
