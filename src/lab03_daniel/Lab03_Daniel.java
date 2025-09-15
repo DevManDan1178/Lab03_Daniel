@@ -131,14 +131,14 @@ public class Lab03_Daniel extends Application{
      * @return true if string is that of a (potentially) valid email address | else false
      */
     private boolean checkEmail(String string) {
-        // [email]@[provider].[domain] -> must have an '@' and a '.' at least 1 char after (check from the 2nd character after '@')
-        int index = string.indexOf('@');
+        // [email]@[provider].[domain] -> must have an '@' and a '.' at least 1 char after, before the end of the string(check from the 2nd character after '@')
+        int indexOfAt= string.indexOf('@');
         int strLen = string.length();
-        if (index <= 0 || index == strLen) {
+        if (indexOfAt <= 0 || indexOfAt>= strLen - 2) {
             return false;
         }
-        
-        return string.indexOf('.', index + 2) != -1;
+        int indexOfDot = string.indexOf('.', indexOfAt + 2);
+        return indexOfDot != -1 && indexOfDot < strLen - 1;
     }
     
     /**
