@@ -5,14 +5,12 @@
 package lab03_daniel;
 
 
-import java.util.Arrays;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -118,6 +116,7 @@ public class Lab03_Daniel extends Application{
             for (TextField field : inputFields) {
                 field.setText("");
             }
+            msgLabel.setText("");
         });
         
         // Show 
@@ -131,7 +130,7 @@ public class Lab03_Daniel extends Application{
         // [email]@[provider].[domain] -> must have an '@' and a '.' at least 1 char after (check from the 2nd character after '@')
         int index = string.indexOf('@');
         int strLen = string.length();
-        if (index == 0 || index == strLen) {
+        if (index <= 0 || index == strLen) {
             return false;
         }
         
