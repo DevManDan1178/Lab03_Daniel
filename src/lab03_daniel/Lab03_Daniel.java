@@ -4,12 +4,19 @@
  */
 package lab03_daniel;
 
+
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -33,45 +40,64 @@ public class Lab03_Daniel extends Application{
         // Setup structure
         BorderPane rootBorder = new BorderPane();
         GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(25, 25, 25, 25));
+        gridPane.setHgap(10);
+        gridPane.setVgap(5);
         rootBorder.setCenter(gridPane);
         
-        // Labels and Textfields
+        // Setup Labels and Textfields
             //First Name
-        Label firstNameLabel = new Label("First Name");
+        Label firstNameLabel = new Label("First Name:");
         TextField firstNameTxtField = new TextField();
         
         gridPane.add(firstNameLabel, 0, 0);
         gridPane.add(firstNameTxtField, 1, 0);
             //Last Name
-        Label lastNameLabel = new Label("First Name");
+        Label lastNameLabel = new Label("Last Name:");
         TextField lastNameTxtField = new TextField();
         
         gridPane.add(lastNameLabel, 0, 1);
         gridPane.add(lastNameTxtField, 1, 1);
             //Email
-        Label emailLabel = new Label("First Name");
+        Label emailLabel = new Label("Email:");
         TextField emailTxtField = new TextField();
         
         gridPane.add(emailLabel, 0, 2);
         gridPane.add(emailTxtField, 1, 2);
             //Password
-        Label passLabel = new Label("First Name");
+        Label passLabel = new Label("Password:");
         PasswordField passField = new PasswordField();
               
         gridPane.add(passLabel, 0, 3);
         gridPane.add(passField, 1, 3);
 
+        // Buttons
+            //Register
+        Button registerButton = new Button("Register");
+        gridPane.add(registerButton, 0, 4);
+            //Clear
+        Button clearButton = new Button("Clear");
+        gridPane.add(clearButton, 1, 4);
         
-
+        TextInputControl[] inputFields = {firstNameTxtField, lastNameTxtField, emailTxtField, passField};
         
-
-
+        // Setup functionality
+        registerButton.setDisable(true);
+        EventHandler fieldInputHandler = (EventHandler) (Event event) -> {
+            for (TextInputControl field : inputFields) {
+                if (field.getText().isEmpty()) {
+                    registerButton.setDisable(true);
+                    return;
+                }
+            }
+            registerButton.setDisable(false);   
+        };
         
-        
-        
- 
+        for (TextInputControl field : inputFields) {
+            field.addEventHandler(EventType.ROOT, fieldInputHandler);
+        }
         //Show
-        Scene scene = new Scene(rootBorder);   
+        Scene scene = new Scene(rootBorder);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
